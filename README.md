@@ -23,6 +23,7 @@ git config --global user.name “[firstname lastname]”
 git config --global user.email “[valid-email]”
 
 git clone https://github.com/zac4312/BlogsApp.git
+
 git clone https://github.com/zac4312/Spring.git
 (after nito meron na kayong copy na pwede pag laroan)
 
