@@ -1,9 +1,11 @@
 yo so may kilangan kayo i download or i make sure na meron kayong ganito 
 
 jdk 17    |      https://www.oracle.com/ph/java/technologies/downloads/#jdk24-windows
+
 git       |     https://git-scm.com/downloads/win
 
 github account  | https://github.com/
+
 Android Studio  | https://developer.android.com/studio?gad_source=1&gad_campaignid=22548434132&gbraid=0AAAAAC-IOZlqZPUUCY39oTb8ceM-bhQ2L&gclid=CjwKCAjw6NrBBhB6EiwAvnT_rpD3n_UeFbA3I05ngnRpsusNbZp7LL8iAJ8tfSj1BKYNWOOtznJG5BoCRfUQAvD_BwE&gclsrc=aw.ds
 
 ide  kahit ano VScode, intelliJ, etc
@@ -24,7 +26,7 @@ git config --global user.email “[valid-email]”
 
 git clone https://github.com/zac4312/BlogsApp.git
 
-git clone https://github.com/zac4312/Spring.git
+git clone --branch Completed_Spring branch-name --single-branch https://github.com/username/repo.git
 (after nito meron na kayong copy na pwede pag laroan)
 
 then if may gusto kayong pasok sa original na directory, like finished design etc.
