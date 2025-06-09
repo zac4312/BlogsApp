@@ -26,7 +26,7 @@ git config --global user.email “[valid-email]”
 
 git clone https://github.com/zac4312/BlogsApp.git
 
-git clone --branch Completed_Spring branch-name --single-branch https://github.com/username/repo.git
+  git clone --branch Completed_Spring --single-branch https://github.com/zac4312/Spring.git
 (after nito meron na kayong copy na pwede pag laroan)
 
 then if may gusto kayong pasok sa original na directory, like finished design etc.
