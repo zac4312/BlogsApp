@@ -5,15 +5,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.comp.models.User;
 import com.example.comp.network.RetrofitClient;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,6 +20,8 @@ public class EditUserActivity extends AppCompatActivity {
     private EditText editTextTitle, editTextParag;
     private Button buttonUpdateUser;
     private Long userId;
+
+    private CheckBox BoxMemories, BoxFood, BoxSport, Boxmedia;
 
 
     @Override
@@ -34,45 +33,50 @@ public class EditUserActivity extends AppCompatActivity {
         editTextParag = findViewById(R.id.editTextParag);
         buttonUpdateUser = findViewById(R.id.buttonUpdateUser);
 
-        // Get user data from intent
+        BoxMemories = findViewById(R.id.memories);
+        Boxmedia = findViewById(R.id.media);
+        BoxSport = findViewById(R.id.sport);
+        BoxFood = findViewById(R.id.food);
+
+
         Intent intent = getIntent();
         userId = intent.getLongExtra("userId", -1);
-        editTextTitle.setText(intent.getStringExtra("userName"));
-        editTextParag.setText(String.valueOf(intent.getIntExtra("userAge", 0)));
+        editTextTitle.setText(intent.getStringExtra(""));
+        editTextParag.setText(intent.getStringExtra(""));
 
-        // Handle Update
         buttonUpdateUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {updateUser();}
         });
-
     }
-
+/// /////////////////////////////////////////////////////////////////////////////////////////
     private void updateUser() {
-        if (userId == null) {
-            Toast.makeText(this, "there is no such user", Toast.LENGTH_SHORT).show();
+        if (userId == null || userId == -1) {
+            Toast.makeText(this, "Invalid user ID", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String updatedTitle = editTextTitle.getText().toString().trim();
         String updatedParag = editTextParag.getText().toString().trim();
 
-        if (updatedTitle.isEmpty() || updatedParag.isEmpty()) {
-            Toast.makeText(this, "Please enter valid name and age", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        User updatedUser = new User();
+        updatedUser.setTitle(updatedTitle);
+        updatedUser.setParag(updatedParag);
 
-        int updatedAge = Integer.parseInt(updatedParag);
-        User updatedUser = new User(updatedTitle, updatedParag);
+        updatedUser.setFood(BoxFood.isChecked());
+        updatedUser.setSport(BoxSport.isChecked());
+        updatedUser.setMedia(Boxmedia.isChecked());
+        updatedUser.setMemories(BoxMemories.isChecked());
+
 
         RetrofitClient.getApiService().updateUser(userId, updatedUser).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(EditUserActivity.this, "User updated!", Toast.LENGTH_SHORT).show();
-                    Intent intent =  new Intent(EditUserActivity.this, Buffer.class);
+                    Intent intent = new Intent(EditUserActivity.this, Buffer.class);
                     startActivity(intent);
-                    finish(); // Close activity after update
+                    finish();
                 } else {
                     Toast.makeText(EditUserActivity.this, "Failed to update user", Toast.LENGTH_SHORT).show();
                 }
@@ -85,5 +89,6 @@ public class EditUserActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }

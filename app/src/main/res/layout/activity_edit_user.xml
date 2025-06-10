@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit User"
+        android:text="Edit Post"
         android:textSize="22sp"
         android:layout_gravity="center"
         android:paddingTop="50dp"/>
@@ -18,23 +18,54 @@
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter New Name"
+        android:hint="New Title"
         android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/editTextParag"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:hint="Enter New Age"
-        android:inputType="number"
+        android:hint="New Paragraph"
         android:textSize="18sp"
         android:layout_marginTop="8dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/memories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Memories"
+                />
+
+            <CheckBox
+                android:id="@+id/food"
+                android:layout_width="77dp"
+                android:layout_height="wrap_content"
+                android:text="Food" />
+
+            <CheckBox
+                android:id="@+id/sport"
+                android:layout_width="116dp"
+                android:layout_height="wrap_content"
+                android:text="Sport" />
+
+            <CheckBox
+                android:id="@+id/media"
+                android:layout_width="86dp"
+                android:layout_height="wrap_content"
+                android:text="media" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/buttonUpdateUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Update User"
+        android:text="Update post"
         android:layout_marginTop="16dp"/>
 
 </LinearLayout>

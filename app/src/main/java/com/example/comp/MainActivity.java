@@ -3,13 +3,15 @@ package com.example.comp;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent; // ADD THIS
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -36,15 +38,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 
 public class MainActivity extends AppCompatActivity {
+
+    private CheckBox BoxMemories, BoxFood, BoxSport, Boxmedia;
 
     private EditText editTextTitle, editTextParag;
 
     private ActivityResultLauncher<String> imagePickerLauncher;
 
-    Uri imageUri; ImageView imageView;
+    Uri imageUri;
 
 
     @Override
@@ -52,9 +55,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize UI elements
+
         editTextTitle = findViewById(R.id.editTextTitle);
         editTextParag = findViewById(R.id.editTextParag);
+
+        BoxMemories = findViewById(R.id.memories);
+        BoxFood = findViewById(R.id.food);
+        BoxSport = findViewById(R.id.Sport);
+        Boxmedia = findViewById(R.id.media);
+
         Button btnImg = findViewById(R.id.btnImg);
         Button buttonSave = findViewById(R.id.buttonSave);
         Button buttonViewUsers = findViewById(R.id.buttonViewUsers);
@@ -64,11 +73,9 @@ public class MainActivity extends AppCompatActivity {
                 uri -> {
                     if (uri != null) {
                         imageUri = uri;
-                        imageView = findViewById(R.id.imageView);
                     }
                 }
         );
-
 
         btnImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        // Handle Save User button click
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,14 +118,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
-            imageView.setImageURI(imageUri); // Optional: show preview
-        }
+             }
     }
 
     private void saveUser()  {
@@ -127,26 +131,25 @@ public class MainActivity extends AppCompatActivity {
         String Title = editTextTitle.getText().toString().trim();
         String Parag = editTextParag.getText().toString().trim();
 
+        boolean memo = BoxMemories.isChecked();
+        boolean media = Boxmedia.isChecked();
+        boolean sport = BoxSport.isChecked();
+        boolean food = BoxFood.isChecked();
+
         UserDTO userDTO = new UserDTO();
         userDTO.setTitle(Title);
         userDTO.setParag(Parag);
 
+        userDTO.setMedia(media);
+        userDTO.setFood(food);
+        userDTO.setSport(sport);
+        userDTO.setMemories(memo);
+
         Gson gson = new Gson();
         String json = gson.toJson(userDTO);
+        Log.d("DEBUG", "JSON: " + json);
 
-        Log.d("DEBUG", "JSON: " + json);  // ← see exactly what is sent
-
-        RequestBody userPart = RequestBody.create(json, MediaType.parse("application/json"));
-
-        if (Title.isEmpty() || Parag.isEmpty()) {
-            Toast.makeText(this, "Please enter both Title and age", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (imageUri == null) {
-            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        RequestBody userPart = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
 
         File file;
         try {
@@ -156,18 +159,18 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        if (imageUri == null) {
+            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
         MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
-
-        RequestBody TitlePart = RequestBody.create(Title, MediaType.parse("text/plain"));
-        RequestBody ParagPart = RequestBody.create(Parag, MediaType.parse("text/plain"));
-
-
         RetrofitClient.getApiService().saveUser(userPart, imagePart).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(MainActivity.this, "User with image saved!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Post saved", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(MainActivity.this, "Upload failed", Toast.LENGTH_SHORT).show();
                 }
@@ -194,5 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
         return tempFile;
     }
+
+
 
 }

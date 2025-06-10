@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ import com.example.comp.network.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.util.ArrayList;
 import java.util.List;
 import com.bumptech.glide.Glide;
 
@@ -52,7 +55,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(holder.userImage);
 
-        // ✅ Handle Delete
         holder.buttonDeleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +62,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             }
         });
 
-        // ✅ Handle Edit (Open EditUserActivity)
         holder.buttonEditUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,10 +84,27 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             }
         });
 
+        // 🔄 Clear icons before adding new ones
+        holder.iconHolder.removeAllViews();
+
+        // ✅ Add selected genres
+        if (user.getFood()) {
+            addGenreIcon(context, holder.iconHolder, R.drawable.image_removebg_preview__7_);
+        }
+      if (user.getSport()) {
+            addGenreIcon(context, holder.iconHolder, R.drawable.image_removebg_preview__10_);
+        }
+        if (user.getMedia()) {
+            addGenreIcon(context, holder.iconHolder, R.drawable.image_removebg_preview__8_);
+        }
+        if (user.getMemories()) {
+            addGenreIcon(context, holder.iconHolder, R.drawable.image_removebg_preview__9_);
+        }
+
+        // ✅ DEBUG log
         Log.d("DEBUG", "Title: " + user.getTitle() + ", Parag: " + user.getParag());
-
-
     }
+
 
     private void deleteUser(Long userId, int position) {
         if (userId == null) {
@@ -123,6 +141,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         TextView Title, Parag;
         Button buttonEditUser, buttonDeleteUser;
 
+        LinearLayout iconHolder;
+
         ImageView userImage;
 
         public UserViewHolder(View itemView) {
@@ -133,6 +153,25 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             buttonDeleteUser = itemView.findViewById(R.id.buttonDeleteUser);
             userImage = itemView.findViewById(R.id.userImage);
 
+            iconHolder = itemView.findViewById(R.id.iconHolder);
         }
+
     }
+
+    private void addGenreIcon(Context context, LinearLayout container, int drawableId) {
+        ImageView imageView = new ImageView(context);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(80, 80); // width, height in pixels
+        params.setMargins(8, 0, 8, 0);
+        imageView.setLayoutParams(params);
+        imageView.setImageResource(drawableId);
+        container.addView(imageView);
+    }
+
+    public void updateUsers(List<User> newUsers) {
+        userList.clear();
+        userList.addAll(newUsers);
+        notifyDataSetChanged();
+    }
+
+
 }

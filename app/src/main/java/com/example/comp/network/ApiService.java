@@ -19,7 +19,7 @@ public interface ApiService {
     @Multipart
     @POST("/user/save")
     Call<User> saveUser(
-            @Part("user") RequestBody user,
+            @Part("user") RequestBody userJson,
             @Part MultipartBody.Part image
     );
 
